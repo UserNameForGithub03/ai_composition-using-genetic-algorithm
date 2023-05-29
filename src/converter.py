@@ -1,3 +1,6 @@
+# Author: namespace-std 
+# Convert midi from/to json text 
+
 import json
 import os
 import math
@@ -51,10 +54,7 @@ def miditodata(input, output):
             else:
                 None
                 # print(d)
-            print(d)
-            # d = msg.vars
-            # d = mido.MetaMessage(msg)
-            # print(d['type'])
+            # print(d)
         return
 
     decoder(file.tracks[0])
@@ -127,6 +127,6 @@ def datatomidi(input, output):
     file.save(output)
     return
 
-miditodata("01.mid", "01.txt")
-datatomidi("01.txt", "re.mid")
-miditodata("re.mid", "de.txt")
+# miditodata("01.mid", "01.txt")
+# datatomidi("01.txt", "re.mid")
+# miditodata("re.mid", "de.txt")
