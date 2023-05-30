@@ -27,6 +27,7 @@ prev_h = np.load("./data/prev_h.npy")
 prev_c = np.load("./data/prev_c.npy")
 prev_h = torch.FloatTensor(prev_h).to(device)
 prev_c = torch.FloatTensor(prev_c).to(device)
+harmy = [1.0,0.0,0.25,0.5,0.5,1.0,0.0,1.0,0.5,0.5,0.25,0.0]
 
 def Embedding(x_batch) : 
     res = np.empty([seq_len, x_batch.shape[0], dim]) 
@@ -83,7 +84,7 @@ def fitnes(piece1):
             cnt=cnt+1
             dif=(piece1.pcs[i+1]-piece1.pcs[i]+36)%12
             cjzq = abs((piece1.pcs[i+1]-piece1.pcs[i])/12)
-            sum=sum+(1.0-harmy[dif])*(1-0.2*cjzq)
+            sum=sum+harmy[dif]*(1-0.2*cjzq)
             if cjzq>=2:
                 nonono=0
     if nonono==0:
@@ -120,6 +121,7 @@ def reproduction(a,b):
     ret=musicpiece()
     ret.pcs=np.append(a.pcs[0:16],b.pcs[16:32])
     ret.dely=np.append(a.dely[0:16],b.dely[16:32])
+
 
     prob=random.random()
     if prob<=0.05:
@@ -173,12 +175,14 @@ def reproduction(a,b):
     #        maxfit=thisval
     #        maxargft=i
     #ret=turndiao(ret,maxargft)
-    
+    for i in range(31):
+        if ret.pcs[i]!=ret.pcs[i+1]:
+            ret.dely[i]=0
+    ret.dely[31]=0
     return ret
 
 
 
-harmy = [1.0,0.0,0.25,0.5,0.5,1.0,0.0,1.0,0.5,0.5,0.25,0.0]
 
 
 
@@ -210,6 +214,10 @@ for i in range(polularation_size):
     prt1 = musicpiece()
     prt1.pcs=np.random.randint(53,high=80,size=32)
     prt1.dely=np.random.randint(0,high=2,size=32)
+    for i in range(31):
+        if prt1.pcs[i]!=prt1.pcs[i+1]:
+            prt1.dely[i]=0
+    prt1.dely[31]=0
     prt1.val=fitnes(prt1)
     populrs.append(prt1)
     presumfit.append(0)
